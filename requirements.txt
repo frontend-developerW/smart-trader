@@ -1,4 +1,5 @@
-python-binance==1.0.17
+python-binance
 python-telegram-bot==20.7
 python-dotenv
+aiohttp
 websockets==10.4

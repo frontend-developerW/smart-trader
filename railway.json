@@ -1,0 +1,14 @@
+{
+    "deploy": {
+      "startCommand": "python3 main.py"
+    },
+    "build": {
+      "nixpacksPlan": {
+        "phases": {
+          "install": { "cmds": [] },
+          "build": { "cmds": [] }
+        }
+      }
+    }
+  }
+  
