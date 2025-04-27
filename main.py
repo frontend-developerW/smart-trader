@@ -171,7 +171,7 @@ class TraderBot:
 
 async def main():
     bot = TraderBot()
-    task = asyncio.create_task(bot.start(profit_percent=0.003))  # target 0.2% profit
+    task = asyncio.create_task(bot.start(profit_percent=0.004))  # target 0.2% profit
 
     while True:
         cmd = await asyncio.to_thread(input)
