@@ -87,10 +87,13 @@ class TraderBot:
                 'target_price': target_price,
                 'buy_price': buy_price
             }
-            self.send_telegram_message(
-                    f"🟢 Bought {qty} {sym} at {buy_price:.6f}, target {target_price:.6f}, for {qty * buy_price:.6f}USDT"
-                )
+
             print(f"🟢 Bought {qty} {sym} at {buy_price:.6f}, target {target_price:.6f}")
+
+            # 🆕 Telegramga sotib olindi deb habar yuborish
+            self.send_telegram_message(
+                f"🟢 Sotib olindi: {qty} {sym}\n💲 Narx: {buy_price:.6f} USDT\n🎯 Target: {target_price:.6f} USDT"
+            )
 
             socket = self.bsm.trade_socket(sym)
             asyncio.create_task(self.monitor_socket(socket, sym.lower()))
@@ -133,6 +136,12 @@ class TraderBot:
                 print(f"⚠️ Sell attempt {attempt+1} failed: {e}")
                 await asyncio.sleep(1)
 
+    def send_telegram_message(self, text):
+        try:
+            self.telegram_bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=text)
+        except Exception as e:
+            print(f"⚠️ Telegram send error: {e}")
+
     async def find_and_buy_new_coin(self):
         await asyncio.sleep(2)
         trending = await self.get_trending_coins()
@@ -144,13 +153,6 @@ class TraderBot:
                 part = spendable / slots
                 await self.buy_coin(new_sym, part, 0.005)
                 break
-
-    def send_telegram_message(self, text):
-        try:
-            self.telegram_bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=text)
-        except Exception as e:
-            print(f"⚠️ Telegram send error: {e}")
-
 
     async def force_sell_all(self):
         print("🛑 Force selling all active coins...")
@@ -174,7 +176,7 @@ class TraderBot:
 
 async def main():
     bot = TraderBot()
-    task = asyncio.create_task(bot.start(profit_percent=0.004))  # target 0.2% profit
+    task = asyncio.create_task(bot.start(profit_percent=0.004))  # target 0.4% profit
 
     while True:
         cmd = await asyncio.to_thread(input)
