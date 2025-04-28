@@ -143,11 +143,12 @@ class TraderBot:
                 await self.buy_coin(new_sym, part, 0.005)
                 break
 
-    async def send_telegram_message(self, text):
+    def send_telegram_message(self, text):
         try:
-            await asyncio.to_thread(self.telegram_bot.send_message, chat_id=TELEGRAM_CHAT_ID, text=text)
+            self.telegram_bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=text)
         except Exception as e:
             print(f"⚠️ Telegram send error: {e}")
+
 
     async def force_sell_all(self):
         print("🛑 Force selling all active coins...")
