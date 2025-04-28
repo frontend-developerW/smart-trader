@@ -179,8 +179,7 @@ class TraderBot:
 
 async def main():
     bot = TraderBot()
-    bot.send_telegram_message("🟢 Savdo boshlandi!")
-    task = asyncio.create_task(bot.start(profit_percent=0.004))  # target 0.4% profit
+    task = asyncio.create_task(bot.start(profit_percent=0.008))  # target 0.4% profit
 
     while True:
         cmd = await asyncio.to_thread(input)
