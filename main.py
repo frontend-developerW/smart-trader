@@ -87,7 +87,9 @@ class TraderBot:
                 'target_price': target_price,
                 'buy_price': buy_price
             }
-
+            self.send_telegram_message(
+                    f"🟢 Bought {qty} {sym} at {buy_price:.6f}, target {target_price:.6f}, for {qty * buy_price:.6f}USDT"
+                )
             print(f"🟢 Bought {qty} {sym} at {buy_price:.6f}, target {target_price:.6f}")
 
             socket = self.bsm.trade_socket(sym)
@@ -122,7 +124,7 @@ class TraderBot:
                 qty = data['qty']
                 buy_price = data['buy_price']
                 real_profit = (sell_price * 0.998 - buy_price * 1.001) * qty
-                await self.send_telegram_message(
+                self.send_telegram_message(
                     f"✅ {data['symbol']} sotildi\n💵 Real Foyda: {real_profit:+.4f} USDT"
                 )
                 print(f"✅ SOLD {qty} {data['symbol']} at {sell_price:.6f}, Real Profit: {real_profit:+.4f} USDT")
@@ -160,7 +162,7 @@ class TraderBot:
                 qty = data['qty']
                 buy_price = data['buy_price']
                 real_profit = (sell_price * 0.998 - buy_price * 1.001) * qty
-                await self.send_telegram_message(
+                self.send_telegram_message(
                     f"🛑 FORCE SOLD {data['symbol']}\n💵 Real Foyda: {real_profit:+.4f} USDT"
                 )
                 print(f"✅ FORCE SOLD {qty} {data['symbol']} at {sell_price:.6f}, Real Profit: {real_profit:+.4f} USDT")
