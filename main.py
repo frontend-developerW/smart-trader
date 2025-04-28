@@ -23,6 +23,9 @@ class TraderBot:
         self.sockets = {}
 
     async def start(self, profit_percent=0.005):
+        self.send_telegram_message(
+                f"🟢 Savdo boshlandi"
+            )
         self.client = await AsyncClient.create(API_KEY, API_SECRET, testnet=True)
         self.bsm = BinanceSocketManager(self.client)
         self.initial_balance = float((await self.client.get_asset_balance(asset='USDT'))['free'])
