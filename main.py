@@ -1,9 +1,9 @@
 import os
 import math
 import asyncio
+import requests
 from dotenv import load_dotenv
 from binance import AsyncClient, BinanceSocketManager
-from telegram import Bot
 
 # Load .env
 load_dotenv()
@@ -16,16 +16,13 @@ class TraderBot:
     def __init__(self):
         self.client = None
         self.bsm = None
-        self.telegram_bot = Bot(token=TELEGRAM_TOKEN)
         self.running = True
         self.symbol_targets = {}
         self.initial_balance = 0
         self.sockets = {}
 
     async def start(self, profit_percent=0.005):
-        self.send_telegram_message(
-                f"🟢 Savdo boshlandi"
-            )
+        self.send_telegram_message("🟢 Savdo boshlandi!")
         self.client = await AsyncClient.create(API_KEY, API_SECRET, testnet=True)
         self.bsm = BinanceSocketManager(self.client)
         self.initial_balance = float((await self.client.get_asset_balance(asset='USDT'))['free'])
@@ -93,7 +90,6 @@ class TraderBot:
 
             print(f"🟢 Bought {qty} {sym} at {buy_price:.6f}, target {target_price:.6f}")
 
-            # 🆕 Telegramga sotib olindi deb habar yuborish
             self.send_telegram_message(
                 f"🟢 Sotib olindi: {qty} {sym}\n💲 Narx: {buy_price:.6f} USDT\n🎯 Target: {target_price:.6f} USDT"
             )
@@ -141,7 +137,12 @@ class TraderBot:
 
     def send_telegram_message(self, text):
         try:
-            self.telegram_bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=text)
+            url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
+            payload = {
+                "chat_id": TELEGRAM_CHAT_ID,
+                "text": text
+            }
+            requests.post(url, data=payload)
         except Exception as e:
             print(f"⚠️ Telegram send error: {e}")
 
