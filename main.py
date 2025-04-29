@@ -181,12 +181,12 @@ async def main():
     bot = TraderBot()
     task = asyncio.create_task(bot.start(profit_percent=0.008))  # target 0.4% profit
 
-    while True:
-        cmd = await asyncio.to_thread(input)
-        if cmd.lower() == 'stop':
-            print("🛑 Stop command received!")
-            await bot.force_sell_all()
-            break
+    # while True:
+    #     cmd = await asyncio.to_thread(input)
+    #     if cmd.lower() == 'stop':
+    #         print("🛑 Stop command received!")
+    #         await bot.force_sell_all()
+    #         break
 
 if __name__ == "__main__":
     try:
