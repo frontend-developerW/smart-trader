@@ -179,8 +179,14 @@ class TraderBot:
 
 async def main():
     bot = TraderBot()
-    task = asyncio.create_task(bot.start(profit_percent=0.008))  # target 0.4% profit
-
+    # task = asyncio.create_task(bot.start(profit_percent=0.008))  # target 0.4% profit
+    try:
+        await bot.start(profit_percent=0.008)
+        while bot.running:
+            await asyncio.sleep(10)
+    finally:
+        if bot.client:
+            await bot.client.close_connection()
     # while True:
     #     cmd = await asyncio.to_thread(input)
     #     if cmd.lower() == 'stop':
